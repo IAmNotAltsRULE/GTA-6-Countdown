@@ -134,4 +134,317 @@ const closeMoreOptions = document.getElementById('closeMoreOptions');
 const chatBtn = document.getElementById('chatBtn');
 const chatPopup = document.getElementById('chatPopup');
 const closeChat = document.getElementById('closeChat');
-const chatMessages = document
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const sendChat = document.getElementById('sendChat');
+
+// Track current question index
+let currentQuestionIndex = 0;
+
+function updateBackground() {
+    const currentArray = isFanBackground ? fanBackgrounds : backgrounds;
+    const currentIndex = isFanBackground ? currentFanIndex : currentOriginalIndex;
+    document.body.style.backgroundImage = `url('${currentArray[currentIndex]}')`;
+    dots.forEach(dot => dot.classList.remove('active'));
+    dots[currentIndex].classList.add('active');
+
+    if (isFanBackground) {
+        fanTextElement.style.display = 'block';
+        fanTextElement.textContent = fanBackgroundTexts[currentFanIndex];
+    } else {
+        fanTextElement.style.display = 'none';
+    }
+}
+
+prevBtn.addEventListener('click', () => {
+    if (isFanBackground) {
+        currentFanIndex = (currentFanIndex - 1 + fanBackgrounds.length) % fanBackgrounds.length;
+    } else {
+        currentOriginalIndex = (currentOriginalIndex - 1 + backgrounds.length) % backgrounds.length;
+    }
+    updateBackground();
+});
+
+nextBtn.addEventListener('click', () => {
+    if (isFanBackground) {
+        currentFanIndex = (currentFanIndex + 1) % fanBackgrounds.length;
+    } else {
+        currentOriginalIndex = (currentOriginalIndex + 1) % backgrounds.length;
+    }
+    updateBackground();
+});
+
+dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+        const index = parseInt(dot.getAttribute('data-index'));
+        if (isFanBackground) {
+            currentFanIndex = index;
+        } else {
+            currentOriginalIndex = index;
+        }
+        updateBackground();
+    });
+});
+
+toggleBtn.addEventListener('click', () => {
+    isFanBackground = !isFanBackground;
+    if (isFanBackground) {
+        currentFanIndex = 0;
+        toggleBtn.textContent = 'Revert to Original Backgrounds';
+    } else {
+        toggleBtn.textContent = 'Toggle Fan Background';
+    }
+    updateBackground();
+});
+
+function createFallingEmojis() {
+    const emoji = '🎉';
+    const numberOfEmojis = 50;
+
+    for (let i = 0; i < numberOfEmojis; i++) {
+        const emojiElement = document.createElement('div');
+        emojiElement.classList.add('falling-emoji');
+        emojiElement.textContent = emoji;
+
+        emojiElement.style.left = `${Math.random() * 100}vw`;
+        emojiElement.style.animationDelay = `${Math.random() * 3}s`;
+
+        emojiContainer.appendChild(emojiElement);
+    }
+}
+
+function stopFallingEmojis() {
+    emojiContainer.innerHTML = '';
+}
+
+let isEmojiFalling = false;
+
+window.end_countdown = function() {
+    isEmojiFalling = !isEmojiFalling;
+    if (isEmojiFalling) {
+        createFallingEmojis();
+        console.log('Emoji animation started!');
+    } else {
+        stopFallingEmojis();
+        console.log('Emoji animation stopped!');
+    }
+};
+
+function setDailyTrivia() {
+    const questionData = triviaQuestions[currentQuestionIndex];
+
+    triviaQuestion.textContent = questionData.question;
+    triviaAnswers.innerHTML = '';
+    questionData.answers.forEach(answer => {
+        const label = document.createElement('label');
+        label.innerHTML = `<input type="radio" name="answer" value="${answer.charAt(0)}"> ${answer}<br>`;
+        triviaAnswers.appendChild(label);
+    });
+}
+
+window.change_question = function() {
+    currentQuestionIndex = (currentQuestionIndex + 1) % triviaQuestions.length;
+    console.log('Question changed to:', triviaQuestions[currentQuestionIndex].question);
+    if (triviaPopup.style.display === 'flex') {
+        setDailyTrivia();
+    }
+};
+
+triviaBtn.addEventListener('click', () => {
+    setDailyTrivia();
+    triviaPopup.style.display = 'flex';
+});
+
+closePopup.addEventListener('click', () => {
+    triviaPopup.style.display = 'none';
+    document.getElementById('triviaResult').textContent = '';
+    const answers = document.getElementsByName('answer');
+    answers.forEach(answer => answer.checked = false);
+});
+
+submitAnswer.addEventListener('click', () => {
+    const answers = document.getElementsByName('answer');
+    let selectedAnswer = '';
+    answers.forEach(answer => {
+        if (answer.checked) selectedAnswer = answer.value;
+    });
+
+    const result = document.getElementById('triviaResult');
+    const currentQuestion = triviaQuestions[currentQuestionIndex];
+    if (selectedAnswer === currentQuestion.correct) {
+        result.textContent = 'Correct! ' + currentQuestion.question.split('?')[0] + ' is ' + currentQuestion.answers.find(a => a.charAt(0) === currentQuestion.correct).slice(3) + '.';
+        result.style.color = 'green';
+    } else if (selectedAnswer) {
+        result.textContent = 'Wrong! The correct answer is ' + currentQuestion.answers.find(a => a.charAt(0) === currentQuestion.correct).slice(3) + '.';
+        result.style.color = 'red';
+    } else {
+        result.textContent = 'Please select an answer!';
+        result.style.color = 'yellow';
+    }
+});
+
+updateLogBtn.addEventListener('click', () => {
+    updateLogPopup.style.display = 'block';
+    updateLogList.innerHTML = '';
+    updateLog.forEach(entry => {
+        const li = document.createElement('li');
+        li.textContent = entry;
+        updateLogList.appendChild(li);
+    });
+});
+
+closeUpdateLog.addEventListener('click', () => {
+    updateLogPopup.style.display = 'none';
+});
+
+moreOptionsBtn.addEventListener('click', () => {
+    moreOptionsPopup.style.display = 'block';
+});
+
+closeMoreOptions.addEventListener('click', () => {
+    moreOptionsPopup.style.display = 'none';
+});
+
+// Chat functionality
+chatBtn.addEventListener('click', () => {
+    chatPopup.style.display = 'block';
+    loadChatMessages();
+    moreOptionsPopup.style.display = 'none';
+});
+
+function loadChatMessages() {
+    if (!chatMessages) {
+        console.error('chatMessages element not found.');
+        return;
+    }
+    const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+    chatMessages.innerHTML = '';
+    messages.forEach(msg => {
+        const p = document.createElement('p');
+        p.textContent = `[${new Date(msg.timestamp).toLocaleTimeString()}] ${msg.text}`;
+        chatMessages.appendChild(p);
+    });
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function containsBannedContent(text) {
+    // Check for banned words
+    const words = text.toLowerCase().split(/\s+/);
+    const hasBannedWord = bannedWords.some(banned => words.includes(banned));
+
+    // Check for links using a simple regex
+    const urlPattern = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([^\s]+\.(com|org|net|co|io|me))/i;
+    const hasLink = urlPattern.test(text);
+
+    return hasBannedWord || hasLink;
+}
+
+function saveChatMessage(text) {
+    if (!chatMessages) {
+        console.error('chatMessages element not found.');
+        return;
+    }
+
+    if (containsBannedContent(text)) {
+        const p = document.createElement('p');
+        p.textContent = `[${new Date().toLocaleTimeString()}] [System] Message blocked due to profanity or links.`;
+        p.style.color = 'red';
+        chatMessages.appendChild(p);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return;
+    }
+
+    const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+    messages.push({ text, timestamp: Date.now() });
+    if (messages.length > 50) messages.shift();
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
+    loadChatMessages();
+}
+
+closeChat.addEventListener('click', () => {
+    chatPopup.style.display = 'none';
+});
+
+sendChat.addEventListener('click', () => {
+    const message = chatInput.value.trim();
+    if (message) {
+        saveChatMessage(message);
+        chatInput.value = '';
+    }
+});
+
+chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        sendChat.click();
+    }
+});
+
+setInterval(loadChatMessages, 2000);
+
+// Add console command to clear chat
+window.clear_chat = function() {
+    if (!chatMessages) {
+        console.error('chatMessages element not found.');
+        return;
+    }
+    chatMessages.innerHTML = '';
+    localStorage.removeItem('chatMessages');
+    console.log('Chat messages cleared.');
+};
+
+// Countdown and Notification logic
+const countdownDate = new Date('May 26, 2026 00:00:00').getTime();
+let notificationSent = false;
+let celebrationTriggered = false;
+
+if ("Notification" in window) {
+    Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+            console.log("Notification permission granted.");
+        } else {
+            console.log("Notification permission denied.");
+        }
+    });
+}
+
+const updateCountdown = () => {
+    const now = new Date();
+    const distance = countdownDate - now;
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    const weeks = Math.round(days / 7);
+
+    document.getElementById('days').textContent = days;
+    document.getElementById('hours').textContent = hours;
+    document.getElementById('minutes').textContent = minutes;
+    document.getElementById('seconds').textContent = seconds;
+    document.getElementById('weeks').textContent = `${weeks} Weeks`;
+
+    if (weeks < 50 && "Notification" in window && Notification.permission === "granted" && !notificationSent) {
+        new Notification("GTA 6 Countdown", {
+            body: "Less than 50 weeks until GTA 6 release!",
+            icon: "./icon.png"
+        });
+        notificationSent = true;
+        console.log("Notification sent.");
+    }
+
+    if (distance < 0) {
+        clearInterval(countdownInterval);
+        document.getElementById('countdown').innerHTML = '<h2>GTA 6 is Out Now!</h2>';
+        document.getElementById('weeks').textContent = '0 Weeks';
+
+        if (!celebrationTriggered) {
+            createFallingEmojis();
+            celebrationTriggered = true;
+            isEmojiFalling = true;
+        }
+    }
+};
+
+updateCountdown();
+const countdownInterval = setInterval(updateCountdown, 1000);
