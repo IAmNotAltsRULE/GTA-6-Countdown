@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA 6 Countdown</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Debug: Ensure favicon.ico is in the root folder with a transparent background -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="favicon.png"> <!-- Fallback PNG -->
+</head>
+<body>
+    <div class="carousel-controls">
+        <button id="prevBtn" class="arrow-btn">←</button>
+        <div class="dots">
+            <span class="dot" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
+            <span class="dot" data-index="3"></span>
+            <span class="dot" data-index="4"></span>
+            <span class="dot" data-index="5"></span>
+            <span class="dot" data-index="6"></span>
+        </div>
+        <button id="nextBtn" class="arrow-btn">→</button>
+    </div>
+    <div class="countdown-container">
+        <h1>GTA 6 Release Countdown</h1>
+        <div id="countdown">
+            <div class="countdown-item"><span id="days">0</span> Days</div>
+            <div class="countdown-item"><span id="hours">0</span> Hours</div>
+            <div class="countdown-item"><span id="minutes">0</span> Minutes</div>
+            <div class="countdown-item"><span id="seconds">0</span> Seconds</div>
+        </div>
+        <div id="weeks"></div>
+    </div>
+    <div id="disclaimer">Disclaimer: This site is not affiliated with Rockstar Games or Take-Two.</div>
+    <div id="fanBackgroundText" class="fan-background-text"></div>
+    <div id="emojiContainer" class="emoji-container"></div>
+    <button id="toggleBackgroundBtn" class="toggle-btn">Toggle Fan Background</button>
+    <button id="moreOptionsBtn" class="more-options-btn">...</button>
+    <div id="moreOptionsPopup" class="more-options-popup">
+        <div class="more-options-content">
+            <span id="closeMoreOptions" class="close-btn">×</span>
+            <h2>More Options</h2>
+            <button id="chatBtn" class="chat-btn">Chat 💬</button>
+        </div>
+    </div>
+    <button id="triviaBtn" class="trivia-btn">Trivia</button>
+    <div id="triviaPopup" class="trivia-popup">
+        <div class="trivia-content">
+            <span id="closePopup" class="close-btn">×</span>
+            <h2>GTA 6 Trivia</h2>
+            <p id="triviaQuestion">What city is expected to be a key setting in GTA 6?</p>
+            <div id="triviaAnswers">
+                <label><input type="radio" name="answer" value="a"> Los Santos</label><br>
+                <label><input type="radio" name="answer" value="b"> Vice City</label><br>
+                <label><input type="radio" name="answer" value="c"> Liberty City</label><br>
+            </div>
+            <button id="submitAnswer" class="submit-btn">Submit</button>
+            <p id="triviaResult"></p>
+        </div>
+    </div>
+    <button id="updateLogBtn" class="update-log-btn">🔔</button>
+    <div id="updateLogPopup" class="update-log-popup">
+        <div class="update-log-content">
+            <span id="closeUpdateLog" class="close-btn">×</span>
+            <h2>Update Log</h2>
+            <ul id="updateLogList"></ul>
+        </div>
+    </div>
+    <div id="chatPopup" class="chat-popup">
+        <div class="chat-content">
+            <span id="closeChat" class="close-btn">×</span>
+            <h2>Community Chat</h2>
+            <p class="chat-note">Note: Messages are filtered for profanity and links.</p> <!-- Updated note -->
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Type a message..." maxlength="100">
+                <button id="sendChat" class="send-btn">Send</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+
+</body>
+</html>
