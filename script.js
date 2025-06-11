@@ -85,11 +85,11 @@ const triviaQuestions = [
 
 // Update log entries
 const updateLog = [
-    "June 11, 2025: Refined mobile responsiveness with additional media queries.",
-    "June 11, 2025: Optimized website for mobile responsiveness.",
     "June 5, 2025: Removed 'clear_message' console command.",
     "June 5, 2025: Added console command 'clear_chat' to clear chat messages.",
-    "June 5, 2025: Updated chat filter to block links."
+    "June 5, 2025: Updated chat filter to block links.",
+    "June 5, 2025: Added 'More Options' button with chat access.",
+    "June 5, 2025: Added basic profanity filter to community chat."
 ];
 
 // Banned words for chat filter
