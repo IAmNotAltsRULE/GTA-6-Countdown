@@ -261,29 +261,44 @@ h2 {
 
 /* Responsive Design for Mobile */
 @media (max-width: 768px) {
+    body {
+        height: auto;
+        min-height: 100vh;
+    }
+
     h1 {
-        font-size: 2em;
+        font-size: 1.8em;
+    }
+
+    .countdown-container {
+        padding: 15px;
+        width: 90%;
+    }
+
+    #countdown {
+        flex-direction: column;
+        gap: 10px;
     }
 
     .countdown-item {
         padding: 5px 10px;
-        min-width: 60px;
+        min-width: 50px;
     }
 
     .countdown-item span {
-        font-size: 1.5em;
-    }
-
-    #weeks {
-        font-size: 1.8em;
-    }
-
-    #disclaimer {
         font-size: 1.2em;
     }
 
+    #weeks {
+        font-size: 1.5em;
+    }
+
+    #disclaimer {
+        font-size: 1em;
+    }
+
     .carousel-controls {
-        display: none; /* Hide arrows on mobile */
+        display: none;
     }
 
     .dots {
@@ -291,13 +306,13 @@ h2 {
     }
 
     .dot {
-        width: 8px;
-        height: 8px;
+        width: 6px;
+        height: 6px;
     }
 
     .toggle-btn, .trivia-btn, .update-log-btn, .more-options-btn {
-        font-size: 1em;
-        padding: 8px 15px;
+        font-size: 0.9em;
+        padding: 6px 12px;
         top: 10px;
         bottom: 10px;
     }
@@ -320,7 +335,7 @@ h2 {
 
     .trivia-popup, .update-log-popup, .more-options-popup, .chat-popup {
         width: 90%;
-        padding: 15px;
+        padding: 10px;
     }
 
     .close-btn {
@@ -328,21 +343,39 @@ h2 {
     }
 
     #chatInput {
-        font-size: 0.9em;
-        padding: 4px;
+        font-size: 0.8em;
+        padding: 3px;
     }
 
     .send-btn {
-        font-size: 0.9em;
-        padding: 4px 8px;
+        font-size: 0.8em;
+        padding: 3px 6px;
     }
 
     .chat-messages {
-        max-height: 200px;
+        max-height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5em;
     }
 
-    #countdown {
-        flex-direction: column;
-        gap: 10px;
+    .countdown-item span {
+        font-size: 1em;
+    }
+
+    #weeks {
+        font-size: 1.2em;
+    }
+
+    #disclaimer {
+        font-size: 0.9em;
+    }
+
+    .toggle-btn, .trivia-btn, .update-log-btn, .more-options-btn {
+        font-size: 0.8em;
+        padding: 5px 10px;
     }
 }
