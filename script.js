@@ -85,29 +85,22 @@ const triviaQuestions = [
 
 // Update log entries
 const updateLog = [
+    "June 11, 2025: Optimized website for mobile responsiveness.",
     "June 5, 2025: Removed 'clear_message' console command.",
     "June 5, 2025: Added console command 'clear_chat' to clear chat messages.",
     "June 5, 2025: Updated chat filter to block links.",
-    "June 5, 2025: Added 'More Options' button with chat access.",
-    "June 5, 2025: Added basic profanity filter to community chat."
+    "June 5, 2025: Added 'More Options' button with chat access."
 ];
 
 // Banned words for chat filter
 const bannedWords = [
-   "damn",
+    "damn",
     "hell",
     "ass",
     "bitch",
     "fuck",
     "shit",
-    "crap",
-    "dick",
-    "motherfucker",
-    "penis",
-    "pussy",
-    "vagina",
-    "end_countdown",
-    "change_question"
+    "crap"
 ];
 
 // Initialize with a random original background
